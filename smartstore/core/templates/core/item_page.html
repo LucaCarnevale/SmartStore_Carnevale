@@ -1,0 +1,125 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block head_title %}{{ block.super }} - Tutti gli Articoli{% endblock head_title %}
+
+{% block content %}
+
+<h1 class="text-center mt-3">Tutti gli articoli in vendita</h1>
+<link rel="stylesheet" type="text/css" href="{% static '/css/homepage.css' %}"/>
+<link rel="stylesheet" href="https://pro.fontawesome.com/releases/v5.13.0/css/all.css">
+
+<main>
+    <div class="container">
+        <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between mb-3">
+            <h7 class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown"
+                aria-haspopup="true" aria-expanded="false">
+                Filtra per
+            </h7>
+            <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+                <a class="dropdown-item" href="{% url 'prezzo_crescente' %}">Prezzo Crescente</a>
+                <a class="dropdown-item" href="{% url 'prezzo_decrescente' %}">Prezzo Decrescente</a>
+                <div class="dropdown-divider"></div>
+                <a class="dropdown-item" href="{% url 'articoli_nuovi' %}">Articoli Nuovi</a>
+                <a class="dropdown-item" href="{% url 'articoli_usati' %}">Articoli Usati</a>
+                <div class="dropdown-divider"></div>
+                <a class="dropdown-item" href="{% url 'item_page' %}">Mostra tutti</a>
+
+            </div>
+            <a href="{% url 'inserisci_articolo' %}" class="btn btn-success ml-auto mr-1">
+                <i class="fas fa-plus"></i>
+                Vendi un articolo
+            </a>
+            <button class="btn btn-success" onclick="window.history.go(-1);">
+                <i class="fas fa-undo"></i>
+                Indietro
+            </button>
+        </div>
+
+
+        <!--Section: Products v.3-->
+        <section class="text-center mb-4">
+
+            <div class="row wow fadeIn">
+
+                {% for item in object_list%}
+                <div class="col-lg-3 col-md-6 mb-4">
+
+                    <div class="card">
+
+                        <div class="view overlay">
+                            {% if item.immagine %}
+                            <img src="{{ item.immagine.url }}" class="card-img-top" width="100" height="200">
+                            {% endif %}
+                            <a href="{{ item.get_absolute_url }}">
+                                <div class="mask rgba-white-slight"></div>
+                            </a>
+                        </div>
+                        <div class="card-body text-center">
+
+                            <h3>{{ item.get_categoria_display }}</h3>
+
+                            <h5>
+                                <strong><a href="{{ item.get_absolute_url }}" class="dark-grey-text">{{ item.nome }}</a></strong>
+                            </h5>
+
+                            <h4 class="font-weight-bold blue-text">
+                                {% if item.discount_prezzo %}
+                                {{ item.discount_prezzo }}
+                                {% else %}
+                                {{ item.prezzo }}0 € {% if item.condizioni == 'U' %}
+                                <h6 style="color: red"> {{ item.get_condizioni_display }} </h6>
+                                {% else %}
+                                <h6 style="color: green"> {{ item.get_condizioni_display }} </h6>
+                                {% endif %}
+                                {% endif %}
+
+                            </h4>
+                            <p class="text-muted">{{ item.data|timesince }} fa</p>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+                {% endfor %}
+            </div>
+        </section>
+        <!--Pagination-->
+
+        {% if is_paginated %}
+        <nav class="d-flex justify-content-center wow fadeIn">
+            <ul class="pagination pg-blue">
+
+                {% if page_obj.has_previous %}
+                <li class="page-item">
+                    <a class="page-link" href="?page={{ page_obj.previous_page_number }}" aria-label="Previous">
+                        <span aria-hidden="true">&laquo;</span>
+                        <span class="sr-only">Previous</span>
+                    </a>
+                </li>
+                {% endif %}
+
+                <li class="page-item active">
+                    <a class="page-link" href="?page={{ page_obj.number }}">{{ page_obj.number }}
+                        <span class="sr-only">(current)</span>
+                    </a>
+                </li>
+
+                {% if page_obj.has_next %}
+                <li class="page-item">
+                    <a class="page-link" href="?page={{ page_obj.next_page_number }}" aria-label="Next">
+                        <span aria-hidden="true">&raquo;</span>
+                        <span class="sr-only">Next</span>
+                    </a>
+                </li>
+                {% endif %}
+            </ul>
+        </nav>
+        {% endif %}
+    </div>
+    </div>
+</main>
+
+{% endblock content %}
+

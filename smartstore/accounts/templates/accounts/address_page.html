@@ -1,0 +1,51 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block head_title %}{{ block.super }} - I Tuoi Indirizzi{% endblock head_title %}
+
+{% block content %}
+<link rel="stylesheet" href="https://pro.fontawesome.com/releases/v5.13.0/css/all.css">
+
+<br>
+<div class="card shadow">
+    <!-- Card Header - Dropdown -->
+    <div class="card-header py-3 d-flex justify-content-between justify-content-between">
+        <h2>Indirizzi di {{ user }}</h2>
+        <button class="btn btn-success" onclick="window.history.go(-1);">
+            <i class="fas fa-undo"></i>
+            Indietro
+        </button>
+    </div>
+
+
+    <!-- Card Body -->
+    <div class="card-body d-inline p-2">
+        {% for address in user_address %}
+        <div class="card " style="display: inline-block;width: 33%;">
+            <div class="card-body">
+                <h4 class="card-subtitle mb-2"><strong>Città: </strong>{{ address.città }} </h4>
+                <h5 class="card-subtitle mb-2"><strong>Via : </strong>{{ address.via}} </h5>
+
+                <br>
+                <a class="btn btn-danger float-right" href=" {%  url 'address_delete' address.id %}">
+                    <i class='far fa-trash-alt'></i>
+                </a>
+                <a class="btn btn-primary"
+                   href="{% url 'address' address.id %}">
+                    <i class='far fa-clipboard'></i>
+                </a>
+                <a class="btn btn-warning" href=" {%  url 'address_modifica' address.id %}">
+                    <i class='far fa-edit'></i>
+                </a>
+
+
+            </div>
+        </div>
+
+        {% endfor %}
+
+
+    </div>
+</div>
+
+
+{% endblock content %}

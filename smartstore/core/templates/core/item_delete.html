@@ -1,0 +1,24 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block head_title %}{{ block.super }} - Elimina Articolo{% endblock head_title %}
+
+{% block content %}
+
+<div class="card mt-3" style="display: inline-block; width: 50%;">
+    <div class="card-body">
+        <h4 class="card-title text-center">Elimina Articolo</h4>
+        <h5 class="card-subtitle mb-2 text-muted text-center">Vuoi davvero cancellare l' articolo - {{ object.nome }}
+            ?</h5>
+        <br>
+        <h6 class="card-subtitle mb-2 text-muted text-center"> Condizione : {{ object.get_condizione_display }} </h6>
+        <br>
+        <form method="post">{% csrf_token %}
+            <input class="btn btn-danger" type="submit" value="Elimina">
+            <a class="btn btn-secondary float-right" href="{%  url 'user_profile' username=request.user.username %}">
+                <i class="fas fa-undo"></i>
+                Indietro</a>
+        </form>
+
+    </div>
+</div>
+{% endblock content %}

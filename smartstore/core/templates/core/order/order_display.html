@@ -1,0 +1,49 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block head_title %}{{ block.super }} - Dettagli Ordine {% endblock head_title %}
+{% block content %}
+
+
+<link rel="stylesheet" type="text/css" href="{% static '/css/homepage.css' %}"/>
+<link rel="stylesheet" href="https://pro.fontawesome.com/releases/v5.13.0/css/all.css">
+
+<main>
+    <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between mt-3">
+        <h6 class="m-0 font-weight-bold">Dettagli dell' ordine</h6>
+        <button class="btn btn-success" onclick="window.history.go(-1);">Indietro</button>
+    </div>
+    <br>
+    <table class="table">
+        <thead>
+        <tr>
+            <th scope="col"> Nome</th>
+            <th scope="col"> Condizione</th>
+            <th scope="col"> Quantità</th>
+            <th scope="col"> Prezzo</th>
+        </tr>
+        </thead>
+        <tbody>
+        {% for order_item in lista_acquisti %}
+        <tr>
+            <td><a href="{{ order_item.product.get_absolute_url }}">{{ order_item.product.nome}}</a></td>
+            <td>{% if order_item.product.condizione == 'U' %}
+                <h6 style="color: yellow"> {{ order_item.product.get_condizione_display }} </h6>
+                {% else %}
+                <h6 style="color: green"> {{ order_item.product.get_condizione_display }} </h6>
+                {% endif %}
+            </td>
+            <td>{{ order_item.quantity }}</td>
+            <td>{{ order_item.product.prezzo}}0 €</td>
+        </tr>
+        {% endfor %}
+
+
+        </tbody>
+    </table>
+
+
+
+</main>
+
+{% endblock content %}

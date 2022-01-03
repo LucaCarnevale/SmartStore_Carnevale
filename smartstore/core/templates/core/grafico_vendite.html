@@ -1,0 +1,72 @@
+{% extends 'base.html' %}
+{% block head_title %}{{ block.super }} - Grafico Vendite{% endblock head_title %}
+
+{% block content %}
+
+<link rel="stylesheet" href="https://pro.fontawesome.com/releases/v5.13.0/css/all.css">
+
+<br>
+<div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
+    <h2 class="m-0">{{ user }}, ecco il tuo Grafico Vendite</h2>
+    <button class="btn btn-success" onclick="window.history.go(-1);">
+        <i class="fas fa-undo"></i>
+        Indietro
+    </button>
+</div>
+
+<div>
+    <canvas id="population-chart" data-url="{% url 'grafico_vendite_user' username=request.user.username %}"></canvas>
+</div>
+
+<script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/chart.js@2.9.3/dist/Chart.min.js"></script>
+<script>
+
+    $(function () {
+
+      var $populationChart = $("#population-chart");
+      $.ajax({
+        url: $populationChart.data("url"),
+        success: function (data) {
+
+          var key=[], value=[];
+            {% for  key, value in items %}
+                key.push({{ key }})
+                value.push({{ value }})
+            {% endfor %}
+
+           var ctx = $populationChart[0].getContext("2d");
+          new Chart(ctx, {
+            type: 'bar',
+            data: {
+              labels: key,
+              datasets: [{
+                label: 'Vendite Giorno',
+                backgroundColor: 'green',
+                data: value,
+              }]
+            },
+            options: {
+                title: {
+                    display: true,
+                    text: 'Le mie vendite mensili'
+                },
+                scales: {
+                    yAxes: [{
+                        ticks: {
+                            max: Math.max.apply(null, value) + 3,
+                            min: 0,
+                            stepSize: 2
+                        }
+                    }]
+                }
+            }
+          });
+
+        }
+      });
+
+    });
+
+  </script>
+{% endblock %}

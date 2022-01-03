@@ -1,0 +1,14 @@
+{% extends 'base.html' %}
+
+{% block head_title %}{{ block.super }} - Login{% endblock head_title %}
+
+{% block content %}
+
+<div class="row justify-content-center mt-4">
+    <div class="col-4 text-center">
+        <p>Logout effettuato con successo !</p>
+        <a href="{% url 'login' %}">Clicca qui per effettuare il login !</a>
+    </div>
+</div>
+
+{% endblock content %}
